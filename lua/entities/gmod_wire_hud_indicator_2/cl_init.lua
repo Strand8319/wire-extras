@@ -72,8 +72,7 @@ end
 concommand.Add("HUD2_showStats", HUD2_showStats, nil);
 
 
-function HUD2_uploadCode( entID, file )
-
+local function HUD2_uploadCode( entID, file )
 	print( "Uploading code..." )
 	HUD_System.uploading = true
 
@@ -91,7 +90,14 @@ function HUD2_uploadCode( entID, file )
 	HUD_System.uploading = false
 	return true
 end
-concommand.Add("HUD2_uploadCode", HUD2_uploadCode, nil);
+concommand.Add("HUD2_uploadCode", HUD2_uploadCode, nil)
+
+net.Receive("HMLUpload", function()
+	local entID = net.ReadUInt(MAX_EDICT_BITS)
+	if not entID then return end
+
+	HUD2_uploadCode(entID)
+end)
 
 
 
